@@ -1,10 +1,10 @@
 import { createElement } from 'react';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import './App.scss';
-import Home from './components/Home';
-import Test from './components/Test';
+import Home from './pages/Home';
+import Test from './pages/Test';
 import { cn } from './helper';
-import { Routes } from './nav.i';
+import { Routes } from './nav';
 
 const App = () => {
   const nav: Routes = [
