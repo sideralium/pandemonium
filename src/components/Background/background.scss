@@ -1,0 +1,50 @@
+$prefix: 'pandemonium';
+$width: 2px;
+$heigt: $width;
+
+html, body {
+    margin: 0;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+html, body, #root, .#{$prefix}-background {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+.#{$prefix}-background {
+    background-color: black;
+
+    &.inverted {
+        background-color: white;
+    }
+
+    .particle {
+        width: $width;
+        height: $heigt;
+        position: absolute;
+        animation-iteration-count: infinite;
+        animation-name: center, darken, fade;
+
+        background-color: white;
+        &.inverted {
+            background-color: black;
+        }
+
+        @for $i from 0 to 400 {
+            $time: (1 + .1 * random(100)) * 1s;
+
+            &:nth-child(#{$i + 1}) {
+                transform: translate(random(100) * 1vw, random(100) * 1vh);
+                animation-duration: $time;
+                animation-delay: -.1 * (100) * $time;
+            }
+        }
+    }
+}
+
+@keyframes center { to { transform: translate(50vw, 50vh) }}
+@keyframes fade { to { opacity: 0 }}
+@keyframes darken { to { background-color: white; }}
