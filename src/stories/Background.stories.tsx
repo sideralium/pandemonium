@@ -11,9 +11,9 @@ const Template: Story<BackgroundProps> = (args) => <Background {...args} />,
   sharedArgTypes = { stars: { control: { type: 'range', min: 10, max: 1000 } } };
 
 export const Default = Template.bind({});
-Default.args = Object.assign({}, sharedArgs);
-Default.argTypes = Object.assign({}, sharedArgTypes);
+Default.args = Object.assign(sharedArgs, {});
+Default.argTypes = Object.assign(sharedArgTypes, {});
 
 export const Inverted = Template.bind({});
-Inverted.args = Object.assign({ inverted: true }, sharedArgs);
-Inverted.argTypes = Object.assign({}, sharedArgTypes);
+Inverted.args = Object.assign(sharedArgs, { inverted: true });
+Inverted.argTypes = Object.assign(sharedArgTypes, {});
