@@ -16,10 +16,7 @@ html, body, #root, .#{$prefix}-background {
 
 .#{$prefix}-background {
     background-color: black;
-
-    &.inverted {
-        background-color: white;
-    }
+    &.inverted { background-color: white }
 
     .particle {
         width: $width;
@@ -29,9 +26,7 @@ html, body, #root, .#{$prefix}-background {
         animation-name: center, darken, fade;
 
         background-color: white;
-        &.inverted {
-            background-color: black;
-        }
+        &.inverted { background-color: black }
 
         @for $i from 0 to 400 {
             $time: (1 + .1 * random(100)) * 1s;
@@ -47,4 +42,4 @@ html, body, #root, .#{$prefix}-background {
 
 @keyframes center { to { transform: translate(50vw, 50vh) }}
 @keyframes fade { to { opacity: 0 }}
-@keyframes darken { to { background-color: white; }}
+@keyframes darken { to { background-color: white }}
