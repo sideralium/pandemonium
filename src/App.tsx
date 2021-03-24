@@ -1,12 +1,8 @@
 import './App.scss';
-import { Background } from './components/Background';
+import Map1x1 from './components/Maps/1-1';
 
 const App = () => {
-  return (
-    <>
-      <Background inverted={false} stars={400} />
-    </>
-  );
+  return <Map1x1 />;
 }
 
 export default App;
