@@ -1,5 +1,5 @@
 import { Story, Meta } from '@storybook/react/types-6-0';
-import { Background, BackgroundPropsI } from '../components/Background';
+import { Background, BackgroundPropsI } from '../components/BasicBackground';
 
 export default {
   title: 'Components/Background',

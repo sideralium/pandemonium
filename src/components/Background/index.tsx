@@ -3,87 +3,74 @@ import { maps } from '../../helper';
 import './background.scss';
 
 export interface BackgroundPropsI {
-    file?: string,
-    parallaxScenes?: Array<ParallaxSceneI>,
-}
-
-interface ParallaxSceneI {
-    /**
-     * Height is a mean used to apply the parallax effect.
-     *
-     * The bigger the height, the further will the element
-     *      be from the main perspective.
-     */
-    height: number,
-    assets?: Array<SceneAssetI>,
-    staticAssets?: Array<SceneAssetI>,
-}
-
-interface SceneAssetI {
     file: string,
-    position: { x: number, y: number },
-    debug?: boolean,
-    activeClass?: string,
-    size?: { width: number, height: number }
 }
 
-export const Background: React.FC<BackgroundPropsI> = ({ file, parallaxScenes, ...props }) => {
-    const assetStyle = (asset: any): Object => {
-        asset.debug = asset.debug ? ("development" === process.env.NODE_ENV) : false;
+export class Background extends React.Component<BackgroundPropsI> {
+    constructor(props: BackgroundPropsI) {
+        super(props);
 
-        return {
-            position: 'absolute',
-            left: maps.basic.width / 2 + asset.position.x,
-            top: maps.basic.height / 2 + asset.position.y,
-            width: (asset.size ? asset.size.width : (asset.debug ? '20px' : undefined)),
-            height: (asset.size ? asset.size.height : (asset.debug ? '20px' : undefined)),
-            backgroundPosition: 'center',
-            color: 'red',
+        this.state = {
+            file: props.file,
         };
     }
 
-    return (
-        <div
-            className="background"
-            style={{
-                width: maps.basic.width * 2,
-                height: maps.basic.height * 2,
-                backgroundImage: file ? `url(${file})` : undefined,
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'black',
-                position: 'relative',
-            }}
-            {...props}
-        >
-            {
-                parallaxScenes?.map((scene, i) => {
-                    return (
-                        <div data-iteration={i} data-height={scene.height} key={i}>
-                            {scene.assets?.map((asset, i) => {
-                                return (
-                                    <div
-                                        key={i}
-                                        style={
-                                            Object.assign({
-                                                background: asset.file ? `url('${asset.file}')` : `url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjeWFuIiBkPSJNMjQgMTBoLTEwdi0xMGgtNHYxMGgtMTB2NGgxMHYxMGg0di0xMGgxMHoiLz48L3N2Zz4=) no-repeat`,
-                                            }, assetStyle(asset))
-                                        }
-                                    >
-                                        {
-                                            asset.debug
-                                                ? `${asset.file}` + (asset.size
-                                                    ? `\n(${asset.size?.width}x${asset.size?.height})`
-                                                    : '')
-                                                : ''
-                                        }
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })
+    private getCanvasId(): string {
+        return 'background';
+    }
+
+    private getContext(): string {
+        return '2d';
+    }
+
+    componentDidMount(): void {
+        const canvas: HTMLCanvasElement = document.getElementById(this.getCanvasId()) as any;
+        if (!canvas) {
+            console.error(`The canvas with the id "${this.getCanvasId()}" could not be found.`);
+            return;
+        };
+
+        // block right click on canvas
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        const ctx: (CanvasRenderingContext2D | null) = canvas.getContext(this.getContext()) as any;
+        if (!ctx) {
+            console.error(`The canvas's context "${this.getContext()}" is not available.`);
+            return;
+        };
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, maps.basic.width * 2, maps.basic.height * 2);
+
+        // draw lines to visualize ship's movements while no graphics are present
+        let columns: number = 16;
+        for (let i = 0; i <= columns; i++) {
+            let xline = maps.basic.height / 2 + (maps.basic.height / columns * i);
+
+            for (let j = 0; j <= columns; j++) {
+                let yline = maps.basic.width / 2 + (maps.basic.width / columns * i);
+
+                ctx.fillStyle = 'white';
+                ctx.fillText(`x${j} y${i}`, yline + 6, (maps.basic.height / 2 + (maps.basic.height / columns * j)) - 6);
+
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'darkblue';
+                ctx.moveTo(yline, maps.basic.height / 2);
+                ctx.lineTo(yline, maps.basic.height / 2 + maps.basic.height);
+                ctx.stroke();
             }
-        </div>
-    );
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'darkblue';
+            ctx.moveTo(maps.basic.width / 2, xline);
+            ctx.lineTo(maps.basic.width / 2 + maps.basic.width, xline);
+            ctx.stroke();
+        }
+    }
+
+    render(): JSX.Element {
+        return (
+            <canvas id={this.getCanvasId()} width={maps.basic.width * 2} height={maps.basic.height * 2} />
+        );
+    }
 };
