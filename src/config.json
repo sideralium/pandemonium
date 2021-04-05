@@ -2,8 +2,8 @@
     "css_prefix": "pandemonium-",
     "maps": {
         "basic": {
-            "width": 2100,
-            "height": 1310
+            "width": 2048,
+            "height": 1024
         }
     }
 }

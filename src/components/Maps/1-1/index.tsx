@@ -1,4 +1,3 @@
-import { maps } from "../../../helper";
 import { Background } from "../../Background";
 
 export const name = '1-1';
